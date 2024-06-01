@@ -1,5 +1,3 @@
-# In myproject/consumers.py
-
 from channels.generic.websocket import WebsocketConsumer
 import json
 import requests

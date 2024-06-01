@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "graphql_ws.django",
     'graphene_django',
     "websocket_app",
     "channels",
@@ -129,4 +130,5 @@ GRAPHENE = {
     'SCHEMA': 'websocket_app.schema.schema',
 }
 
-ASGI_APPLICATION = 'websocket_proj.asgi.application'
+# ASGI_APPLICATION = 'websocket_proj.asgi.application'
+ASGI_APPLICATION = 'graphql_ws.django.routing.application'
