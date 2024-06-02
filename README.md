@@ -3,8 +3,9 @@ Server side event example on Django and Graphql
 
 
 # To install
+* Use cors headers to support connected from other apps such as ReactJS
 ```
-pip3 install django graphene-django channels asgiref websockets graphql-ws
+pip3 install django channels daphne django-cors-headers
 ```
 
 # To install websocat for testing websocket
@@ -12,46 +13,18 @@ pip3 install django graphene-django channels asgiref websockets graphql-ws
 cargo install websocat
 ```
 
-# To run server
+
+# To run servers
+* They should use different ports
+* They should all be running. 
+* Daphne serves websocket requests while Django server serves all the other requests. If you only want to test websocket, please feel free to only run daphne server.
 ```
-python3 manage.py makemigrations websocket_app
-python3 manage.py migrate
-daphne websocket_proj.asgi:application
+daphne -p 8001 websocket_proj.asgi:application
+python3 manage.py runserver
 ```
 
 # Connect to WebSocket server
 Open a new terminal and run this
 ```
-websocat ws://127.0.0.1:8000/ws/posts/
-```
-
-# To access GraphQL Playground
-```
-http://127.0.0.1:8000/graphql/
-```
-
-# To add example modal
-```
-mutation {
-  createPost(title: "New Post Title", content: "Lorem ipsum dolor sit amet") {
-    post {
-      id
-      title
-      content
-    }
-  }
-}
-```
-
-
-# To query all modal
-```
-query MyQuery {
-  allPosts {
-    content
-    createdAt
-    id
-    title
-  }
-}
+websocat ws://127.0.0.1:8001/ws/test/
 ```

@@ -1,8 +1,7 @@
-from channels.generic.websocket import WebsocketConsumer
 import json
-import requests
+from channels.generic.websocket import WebsocketConsumer
 
-class PostConsumer(WebsocketConsumer):
+class Consumer(WebsocketConsumer):
     def connect(self):
         self.accept()
 
@@ -10,38 +9,11 @@ class PostConsumer(WebsocketConsumer):
         pass
 
     def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        message_type = text_data_json['type']
+        """
+        This method is called when a message is received from the WebSocket.
+        It will echo back the message with "123" appended to it and send it back to the client.
+        Note: Assuming incoming text_data is a string. If it's a JSON string, we can parse it by json.loads(text_data)
+        """
+        modified_data = text_data.strip() + "123"
 
-        if message_type == 'query_posts':
-            self.query_posts()
-
-    def query_posts(self):
-        # Define your GraphQL query
-        query = '''
-            query {
-            allPosts {
-                id
-                title
-                content
-                createdAt
-            }
-            }
-        '''
-
-        # Make a POST request to the GraphQL endpoint
-        graphql_endpoint = 'http://127.0.0.1:8000/graphql/'
-        response = requests.post(graphql_endpoint, json={'query': query})
-
-        if response.status_code == 200:
-            # If the request is successful, send the query result back to the WebSocket client
-            self.send(text_data=json.dumps({
-                'type': 'query_result',
-                'data': response.json()['data'],
-            }))
-        else:
-            # If the request fails, send an error message back to the WebSocket client
-            self.send(text_data=json.dumps({
-                'type': 'query_error',
-                'message': 'Failed to execute GraphQL query',
-            }))
+        self.send(text_data=json.dumps(modified_data))
