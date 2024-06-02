@@ -53,7 +53,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-# ROOT_URLCONF = "websocket_proj.urls"
+ROOT_URLCONF = "websocket_proj.urls"
 
 TEMPLATES = [
     {
@@ -135,4 +135,8 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels.layers.InMemoryChannelLayer"
     }
+}
+
+GRAPHENE = {
+    'SCHEMA': 'websocket_app.schema.schema'
 }

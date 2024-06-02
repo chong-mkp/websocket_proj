@@ -5,7 +5,7 @@ Server side event example on Django and Graphql
 # To install
 * Use cors headers to support connected from other apps such as ReactJS
 ```
-pip3 install django channels daphne django-cors-headers
+pip3 install django channels daphne django-cors-headers graphql-core graphene-django
 ```
 
 # To install websocat for testing websocket
@@ -13,6 +13,12 @@ pip3 install django channels daphne django-cors-headers
 cargo install websocat
 ```
 
+
+# To migrate
+```
+python3 manage.py makemigrations websocket_app
+python3 manage.py migrate
+```
 
 # To run servers
 * They should use different ports
@@ -27,4 +33,28 @@ python3 manage.py runserver
 Open a new terminal and run this
 ```
 websocat ws://127.0.0.1:8001/ws/test/
+```
+
+
+# To add example modal
+```
+mutation {
+  createMyModel(amount: 123) {
+    payment {
+      id
+      amount
+    }
+  }
+}
+```
+
+
+# To query all modal
+```
+query MyQuery {
+  payments {
+    id
+    amount
+  }
+}
 ```
