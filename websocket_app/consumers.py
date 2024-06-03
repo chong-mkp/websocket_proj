@@ -1,42 +1,39 @@
 import json
-from channels.generic.websocket import WebsocketConsumer
-from graphql import graphql
-from graphene import Schema
-from websocket_app.schema import Query  
+from channels.generic.websocket import AsyncWebsocketConsumer
+from graphene_django.settings import graphene_settings
+from graphql import graphql_sync
 
 
-class Consumer(WebsocketConsumer):
-    def connect(self):
-        self.accept()
+class Consumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        await self.accept()
 
-    def disconnect(self, close_code):
+    async def disconnect(self, close_code):
         pass
 
-    def receive(self, text_data):
-        """
-        This method is called when a message is received from the WebSocket.
-        It will echo back the message with "123" appended to it and send it back to the client.
-        Note: Assuming incoming text_data is a string. If it's a JSON string, we can parse it by json.loads(text_data)
-        """
-        modified_data = text_data.strip() + "123"
+    async def receive(self, text_data):
+        try:
+            # Attempt to load the input as JSON
+            data = json.loads(text_data)
+            query = data.get('query')
+            if not query:
+                raise ValueError("No query found in the JSON data.")
+        except Exception:
+            # If JSON loading fails, treat input as a raw GraphQL query string
+            query = text_data
 
-        self.send(text_data=json.dumps(modified_data))
+        try:
+            # schema = graphene_settings.SCHEMA
+            # result = graphql_sync(schema, query)
+            # content = {
+            #     'data': result.data,
+            #     'errors': [error for error in result.errors] if result.errors else [],
+            # }
+            content = {
+                'data': query,
+                'errors': None,
+            }
+        except Exception as e:
+            content = {'error': str(e)}
 
-    # def receive(self, text_data):
-    #     # Deserialize the received JSON string into a Python dictionary
-    #     received_data = json.loads(text_data)
-
-    #     # Extract the GraphQL query from the received data
-    #     graphql_query = received_data.get('query')
-
-    #     # Execute the GraphQL query
-    #     result = graphql(Schema(query=Query), graphql_query)
-
-    #     # Serialize the result of the query into a JSON-compatible Python object
-    #     result_data = {'data': result.data, 'errors': result.errors}
-
-    #     # Convert the serialized data into JSON string
-    #     json_data = json.dumps(result_data)
-
-    #     # Send the JSON data as a WebSocket message
-    #     self.send(text_data=json_data)
+        await self.send(text_data=json.dumps(content))

@@ -3,9 +3,8 @@ Server side event example on Django and Graphql
 
 
 # To install
-* Use cors headers to support connected from other apps such as ReactJS
 ```
-pip3 install django channels daphne django-cors-headers graphql-core graphene-django
+pip3 install django channels daphne graphene-django
 ```
 
 # To install websocat for testing websocket
@@ -36,10 +35,10 @@ websocat ws://127.0.0.1:8001/ws/test/
 ```
 
 
-# To add example modal
+# To add an row to the model table
 ```
 mutation {
-  createMyModel(amount: 123) {
+  createPayment(amount: 123) {
     payment {
       id
       amount
@@ -49,9 +48,9 @@ mutation {
 ```
 
 
-# To query all modal
+# To query all rows of the model table
 ```
-query MyQuery {
+query GetAllPayments {
   payments {
     id
     amount

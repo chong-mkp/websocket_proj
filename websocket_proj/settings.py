@@ -37,13 +37,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "corsheaders",
     "channels",
+    "graphene_django",
     "websocket_app",
 ]
 
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -72,6 +71,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "websocket_proj.wsgi.application"
+ASGI_APPLICATION = 'websocket_proj.asgi.application'
 
 
 # Database
@@ -126,9 +126,6 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-CORS_ALLOW_ALL_ORIGINS = True  # Allow all origins for testing
-
-ASGI_APPLICATION = 'websocket_proj.asgi.application'
 
 # Add channels layers for websocket support (you can use in-memory for testing)
 CHANNEL_LAYERS = {
@@ -138,5 +135,5 @@ CHANNEL_LAYERS = {
 }
 
 GRAPHENE = {
-    'SCHEMA': 'websocket_app.schema.schema'
+    "SCHEMA": "websocket_app.schema.schema"
 }
