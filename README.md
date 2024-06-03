@@ -3,8 +3,9 @@ Server side event example on Django and Graphql
 
 
 # To install
+* Here we are using uvicorn as ASGI server. Another option is to use daphne as the ASGI server.
 ```
-pip3 install django channels daphne graphene-django
+pip3 install django graphene-django uvicorn channels 'uvicorn[standard]'
 ```
 
 # To install websocat for testing websocket
@@ -23,6 +24,12 @@ python3 manage.py migrate
 * They should use different ports
 * They should all be running. 
 * Daphne serves websocket requests while Django server serves all the other requests. If you only want to test websocket, please feel free to only run daphne server.
+```
+uvicorn websocket_proj.asgi:application --host 127.0.0.1 --port 8001
+python3 manage.py runserver
+```
+
+* If using daphne, run the following command instead
 ```
 daphne -p 8001 websocket_proj.asgi:application
 python3 manage.py runserver
